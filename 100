@@ -1,62 +1,291 @@
-#include<iostream>
-#include<vector>
-#include<algorithm>
-#include<climits>
-#include<cmath>
-#include<string>
-#include<queue>
+#include <iostream>
 using namespace std;
-
-void merge(int arr[],int start,int mid ,int end){
-    vector<int> temp(end - start + 1);
-    int left =start ,right = mid+1;
-    int index =0;
-    while(left<=mid && right <=end)
+void merge(int arr[], int left, int mid, int right)
+{
+    vector<int> temp(right - left + 1);
+    int i = left;
+    int j = mid + 1;
+    int index = 0;
+    while (i <= mid && j <= right)
     {
-        if(arr[left]<arr[right]){
-            temp[index]=arr[left];
-            left++;
+        if (arr[i] < arr[j])
+        {
+            temp[index] = arr[i];
+            i++;
             index++;
         }
-        else{
-            temp[index]=arr[right];
-            right++;
-            index++;
+        else
+        {
+            temp[index] = arr[j];
+            j++, index++;
         }
     }
-    while(left<=mid){
-        temp[index]=arr[left];
-        left++;
+    while (i <= mid)
+    {
+        temp[index] = arr[i];
+        i++;
         index++;
     }
-    while(right<=end){
-        temp[index]=arr[right];
-        right++;
+    while (j <= right)
+    {
+        temp[index] = arr[j];
+        j++;
         index++;
+    }
+    // copying the temporary to arr
+    for (int k = 0; k < temp.size(); k++)
+    {
+        arr[k + i] = temp[k];
+    }
+}
+void mergesort(int arr[], int left, int right)
+{
+    if (left < right)
+    {
+        int mid = left + (right - left) / 2;
+        mergesort(arr, left, mid);
+        mergesort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
+    }
+}
 
+void Dmerge(int arr[], int left, int mid, int right)
+{
+    int count = 0;
+    vector<int> temp(right - left + 1);
+    int i = left;
+    int j = mid + 1;
+    int index = 0;
+    while (i <= mid && j <= right)
+    {
+        count++;
+        if (arr[i] > arr[j])
+        {
+            temp[index] = arr[i];
+            i++;
+            index++;
+        }
+        else
+        {
+            temp[index] = arr[j];
+            j++, index++;
+        }
     }
-    // copying the temp array to original array
-    for(int i=0;i<temp.size();i++){
-        arr[start+i]=temp[i];
+    while (i <= mid)
+    {
+        temp[index] = arr[i];
+        i++;
+        index++;
+    }
+    while (j <= right)
+    {
+        temp[index] = arr[j];
+        j++;
+        index++;
+    }
+    // copying the temporary to arr
+    for (int k = 0; k < temp.size(); k++)
+    {
+        arr[k + i] = temp[k];
+    }
+    cout << count;
+}
+void Dmergesort(int arr[], int left, int right)
+{
+    if (left < right)
+    {
+        int mid = left + (right - left) / 2;
+        Dmergesort(arr, left, mid);
+        Dmergesort(arr, mid + 1, right);
+        Dmerge(arr, left, mid, right);
     }
 }
-void mergeSort(int arr[],int start ,int end){
-    if(start<end){
-       int mid = (start+end)/2;
-       mergeSort(arr,start,mid);
-       mergeSort(arr,mid+1,end);
-       merge(arr,start,mid,end);
-    }
+int findKthSmallest(int arr[], int size, int k)
+{
+    mergesort(arr, 0, n - 1);
+    return arr[k - 1];
 }
-int main(){
-    int arr[]={1,2,3,4,5,1,3,4};
-    int size = sizeof(arr)/sizeof(arr[0]);
-    int start = 0;
-    int end = size - 1;
-    mergeSort(arr,start,end);
-    for(int i=0;i<size;i++){
-        cout<<arr[i]<<" ";
-    }
-    return 0;
-    
-}
+int main()
+{
+
+    // . What is Merge Sort?
+    // Merge sort is a divide and conqure sorting algorithm that recursively splits the array into two halves , sort them seperatly and then merge them back in sorted order.
+    // 2. Why is Merge Sort a Divide and Conquer Algorithm?
+    // Merge sort follow the divide and conqure strategy becausw :
+    // divide : it recursively split the atyyay into two halves.
+    // connqure:it sort each half independendly.
+    // combime :it marges the two sorted halves back together
+
+// 3. What is the Time Complexity of Merge Sort?
+// best Case: o(nlogn)
+// average:o(nlogn)
+// worst:o(nlogn)
+// 4. Why is Merge Sort better than Bubble Sort for large inputs?
+// merge sort is o(nlogn) and bubble sort is o(n*n)
+// merge sort is much faster for larges input because it reduces the number of comparision significanlty
+// it is stable
+// (maintains order of equal ) and workd well for linkedlist
+// 5. Write a simple Merge Sort function in C++.
+// int arr[]={12,11,13,5,6,7};
+// int n= sizeof(arr)/sizeof(arr[0]);
+// mergesort(arr,0,n-1);
+// cout<<"Sorted Arrays: "<<endl;
+
+// for(int i=0;i<n;i++){
+//     cout<<arr[i]<<" ";
+// }
+// // Modify Merge Sort to Sort in Descending Order.
+// // . Count the Number of Comparisons in Merge Sort.
+// // 10. Find the kth Smallest Element using Merge Sort.
+// int k=2;
+// findKthElemnet(arr,size,k);
+// What is Merge Sort?
+// Merge sort is a sorting algorithm that splits an array into smaller parts ,sort them and then merge the sorted parts to produce a fully sorted array.
+// How does Merge Sort split an array?
+// It divides the array into roughly eaual hlvely eqaula halves until each part has or no element.
+// What happens during the merge step in Merge Sort?
+// during tge merge sort two sorted subarray are combined into a single sortes array by comparing the elemsnt form each subarray and arranging them in order..
+// Why is Merge Sort called a "divide and conquer" algorithm?
+// becuase it divides the problem into smaller parts solves each part , then conquere the whole by merging the sorted parts
+// .What is recursion and how is it used in Merge Sort?
+// recursion is hwne a fiunction calls itself .Inmerge sort then sorting function calls itself to sort each half of the array until the basecondition is met/
+// How do you merge two sorted arrays?
+// you compare the first element of the both array , move the smaller one to a new and repet untile all element are merges in sorted .
+// What is the time complexity of Merge Sort?
+// o(nlogn);
+// Is Merge Sort a stable sorting algorithm?
+// Yes merge sort can be easily impltemnt inc++ to sort array or vector of number.
+
+// Can Merge Sort be used to sort numbers in C++?
+// yes merge sort can be easily impletents in c++ to sort array pf vector of number
+
+// What is one advantage of Merge Sort over Bubble Sort?
+// merge sort is much fast than bubble sort ,espicially for larger array ,sue array,sue to its o(nlogn) efficiency to bubble sort's o(n^2)
+// What is Merge Sort?
+// merge sort is sorting algorithm that divides an array into halves sorted sorts each half and then merges the sorted halves to form a fully sorted array.
+// How does Merge Sort split an array?
+// It recursivley divieds the array into two roughly equal halves unlil each each subarray contains one or zero  element.
+// What is the base case in Merge Sort?
+// The best case is when the array has one or no elemet meaing it is alrelady sorted.
+// What does "divide and conquer" mean in Merge Sort?
+// it means breaking the probl,e into smlaaer pieces (dividing),solving each piece indivivuallt (conquring) and then combining them to solve origial problems
+// What is the role of the merge function?
+// the merge function combines two sorted function subarrays into a single sorted array by comparing and ordering their elements.
+// How many levels of recursion does Merge Sort typically have?
+// Approximatlt logn levels where n is the number of eklemenst .
+// What is the time complexity of Merge Sort?
+// O(n log n)
+// What extra space does Merge Sort require?
+// O(n) for aditinal spaces for temp arrat uses dduring merging.
+// // }}
+// Is Merge Sort a stable sorting algorithm?
+// Yes it preseres the relatives order pf equal of wlemenets.
+// How does recursion help in Merge Sort?
+// recursion sinplefies the process by automatically handling the repeated spilting of the array until reaching the base case.
+
+// What happens during the merge step?
+
+// two sorted subarrays are combined there elemensts and placing them in order in a new array.
+// Can Merge Sort be used with linked lists?
+// yes merge sort swors well with linkedlist because it doesnot requere andome access to eleemnts.
+// How are two sorted arrays merged?
+// by complring the smallesr elemensr of each array ans copping the smaeer one inti a new array.
+// What happens if the input array is already sorted?
+// merge sort still split and merge the array so its time complexity remains o(nlogn).
+// How does Merge Sort handle duplicate values?
+// dupliuctes values are treated like any other element sand the algorithm maintains there relative order.
+
+// What is a sorted subarray?
+// A sorted subarray us a portion of the array in which the elements are in orderder.
+// Is Merge Sort a comparison-based algorithm?
+// Yes it sorts ny comparing the elemenst in the array.
+// What makes Merge Sort more efficient than Bubble Sort?
+//
+// Merge sorts o(longn) time complexity in much fatsre than bubble sort's.
+// Does Merge Sort modify the original array?
+
+// yes the merge step undates the origianl array with sorted wlwmwnst.
+// What is the main operation in the merge process?
+// The main operation is compareing the fromt elemenst of two subarrays and copinh the smaller one into the merges array.
+// Can Merge Sort be adapted to sort in descending order?
+// yes by reversing the cp,parision logic in the merge function.
+// What purpose do temporary arrays serve in Merge Sort?
+// temp array holds the divided subarray duing merging making it easier to combione them in sorted order.
+// How does Merge Sort ensure every element is included in the final array?
+// the merging process continues until all the elemnst from the divides subarray have been copied into the sorted order.
+//
+// Is Merge Sort implemented in-place?
+// no , becusase it requere addition space proportion to the size o fthe array o(n).
+// What does it mean for a sort to be stable?
+// stability means that if two elemesr are qual there original orer is preservedin the sorted output.
+// Why is recursion beneficial in Merge Sort implementations?
+// recursion simplify code structure by automatically manging subdivion of the array .
+// How does Merge Sort reduce the problem size?
+// It repeadly spliting smaller parts until each part is trivial to sort
+
+// Why might Merge Sort be chosen for large datasets?
+// Its consistes o(nlogn )
+
+//  performance makes it reliable and efficient.}
+// What is the primary comparison in the merge process?
+// The algorithm compares the frst of the two sorted subarray to decide which one to place next in the merged array.
+// can merge sort be impletements using both array and vector in c++;
+// yes merge sort can be ompltented for both array and vector in c++ with simpiler logic.
+// What is Merge Sort?
+// A divide and conqure sorteing algorithm.
+// What is the base case in Merge Sort?
+// an array is 0 or 1 elemenst.
+What is the main idea behind Merge Sort ? Split sort hen merge
+
+                                              What is the time complexity of Merge Sort
+    ? o(nlogn).Is Merge Sort a stable sorting algorithm
+    ? yes
+          What extra space does Merge Sort require
+    ? o(n).Is Merge Sort an in - place algorithm
+    ? no.What is the role of recursion in Merge Sort
+    ? To split the array into halves.What does the merge function do
+    ? combines two sorted array into one.How many levels of recursion does Merge Sort have
+    ? log(n).What does "divide and conquer" mean in Merge Sort
+    ? divide the array conquere each part then merge.
+
+      How are two sorted arrays merged
+    ?
+    // By comparing and picking then smaller elements.
+    Does Merge Sort compare elements
+    ? yes during the serge step.Can Merge Sort be used with arrays
+    ? yes
+          Can Merge Sort be used with linked lists
+    ? yes
+          Can Merge Sort be used with linked lists
+    ? yes
+          What happens if the input array is already sorted
+    ? it still splits and merge comlplxity
+      o(nlogn)
+          What is the primary operation in the merge step
+    ? elemenst complarision.How does Merge Sort handle duplicate values
+    ? it maintains there relative order.What type of algorithm is Merge Sort
+    ? dnc
+          Can Merge Sort be adapted for descending order
+    ? yes,
+    by reversing the complarion logic.What is a temporary array in Merge Sort ? yes an auxilarry arry usined during merging.What does splitting the array do ? break it smaller subarray.Is Merge Sort adaptive ? no
+                                                                                                                                                                                                                      What is the merge process
+    ? A combining two sorted list int one sorted list
+
+          How is Merge Sort different from Quick Sort
+    ? it alwasys divides the array equally.What is the advantage of Merge Sort
+    ? o(nlogn)
+          Does Merge Sort require element swapping
+    ? no typically it copies elements
+          Is Merge Sort parallelizable
+    ? yes the splits parts can by sorted concurrently.What is the overall process of Merge Sort
+    ? recursive splits then back in sorted order.What is a sorted subarray
+    ? A section of the array in order.Why use recursion in Merge Sort
+    ? To break the array into smaller parts.Can Merge Sort be implemented iteratively
+    ? Yes,
+    through recurison is comon.What does O(n) extra space mean ? It ueses the memory proportion to the array size.How does Merge Sort perform on nearly sorted data ? it still rus in o(nlogn).Does input order affect Merge Sort’s performance ? no, its always takes o(nlogn) time.How does Merge Sort differ from Insertion Sort ? it divides and conquere insertion does not.What is the worst - case time complexity of Merge Sort ? o(nlogn) How many comparisons occur during a merge ? roughly n comparision per merge level.Why do we split the array in Merge Sort ? to simplify sorted by dividing the problem does merge sort swap > no Does Merge Sort swap elements ? noboolalpha How are odd - length arrays handled ? one subarray gets an extra elements.What is a merge sort tree ? CONCEPTUAL TREE OF RECURSIVE ELEMENTS.Is Merge Sort good for external sorting ? YES IT WORKD WELL WITH LARGES DATASET.What does “stable sort” mean ? IT PREVERSE THE ORDER OF EQUAL ELEMENET.Does Merge Sort use a pivot element ? NO, THATS A FEATURE OF QUICK sort
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Is Merge Sort primarily recursive
+    ? YES What is the role of an auxiliary array
+    ? IT TEMPORRY STORES ELEEMNTS DURING MERGING Can Merge Sort be considered in - place
+    ? no Can Merge Sort be modified to count inversions
+    ? YES BY COUNTING DURING THE MERGE PROCESS.}
